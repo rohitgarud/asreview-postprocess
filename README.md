@@ -8,7 +8,7 @@ ASReview Post-process extension is under development and is not yet available on
 
 
 ## License
-The extension is published under the [Apache 2.0 license](https://github.com/rohitgarud/asreview-notes-export/blob/main/LICENSE).
+The extension is published under the [Apache 2.0 license](https://github.com/rohitgarud/asreview-postprocess/blob/main/LICENSE).
 
 ## Contact
 This is an unofficial extension of ASReview and is developed and maintained by [Rohit Garud](https://github.com/rohitgarud). 
