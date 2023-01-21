@@ -42,7 +42,7 @@ setup(
     extras_require={},
     entry_points={
         "asreview.entry_points": [
-            "postprocess = asreviewcontrib.postprocess.entrypoint:PostprocessEntryPoint",
+            "keywords = asreviewcontrib.postprocess.entrypoint:KeywordsEntryPoint",
         ]
     },
     project_urls={
