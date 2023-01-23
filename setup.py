@@ -38,6 +38,10 @@ setup(
     packages=find_namespace_packages(include=['asreviewcontrib.*']),
     install_requires=[
         "asreview>=1,<2",
+        "numpy",
+        "scikit-learn",
+        "pandas",
+        "fuzzywuzzy"
     ],
     extras_require={},
     entry_points={
