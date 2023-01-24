@@ -42,7 +42,7 @@ def extract_keywords(asreview_filename, outputfile_name, method, use_all_records
             dataset_w_labels["current_label"] == 1
         ].copy()
 
-    if method == "tf-idf":
+    if method in ["tf-idf", "textrank"]:
         # Applying preprocessing to the dataset
         dataset_included["text"] = dataset_included["text"].apply(pre_process)
 
@@ -62,7 +62,7 @@ def extract_keywords(asreview_filename, outputfile_name, method, use_all_records
             "This keyword extraction method is not implemented. Please select from [tf-idf, rake, yake]."
         )
 
-    dataset_included = dataset_included.assign(extracted_keywords=extracted_keywords)
+    dataset_included[f"extracted_keywords ({method})"] = extracted_keywords
     dataset_included.drop(["current_label", "text"], axis=1, inplace=True)
     dataset_included.to_csv(outputfile_name)
     shutil.rmtree(project_path)

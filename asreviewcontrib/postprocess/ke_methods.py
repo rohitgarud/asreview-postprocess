@@ -80,7 +80,36 @@ def ke_yake(corpus):
         deduplicated_doc_keywords = list(process.dedupe(doc_keywords, threshold=70))
         final_keywords = ", ".join(deduplicated_doc_keywords[:5])
         extracted_keywords.append(final_keywords)
+    return extracted_keywords
 
 
 def ke_textrank(corpus):
-    pass
+    import subprocess
+
+    try:
+        import pytextrank
+    except ModuleNotFoundError:
+        print(
+            "The TextRank keyword extraction method requires the 'pytextrank' package to be installed. Install optional ASReview-Postprocess dependencies for TextRank with pip install asreview-postprocess[textrank] or install all optional ASReview-Postprocess dependencies with pip install asreview-postprocess[all]"
+        )
+
+    import spacy
+
+    subprocess.run(["spacy", "download", "en_core_web_sm"])
+
+    # load a spaCy model
+    nlp = spacy.load("en_core_web_sm")
+    stopwords = nlp.Defaults.stop_words
+    # add PyTextRank to the spaCy pipeline
+    nlp.add_pipe("textrank")
+
+    extracted_keywords = []
+    for text in corpus:
+        doc = nlp(text)
+        doc_keywords = [
+            keyword.text for keyword in doc._.phrases if len(keyword.text.split()) <= 3
+        ]
+        deduplicated_doc_keywords = list(process.dedupe(doc_keywords, threshold=70))
+        final_keywords = ", ".join(deduplicated_doc_keywords[:5])
+        extracted_keywords.append(final_keywords)
+    return extracted_keywords
