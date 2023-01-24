@@ -45,6 +45,7 @@ setup(
     ],
     extras_require={
         "rake": ["nltk", "rake_nltk"],
+        "yake": ["yake @ git+https://github.com/LIAAD/yake"],
         "all": ["nltk", "rake_nltk"],
     },
     entry_points={
