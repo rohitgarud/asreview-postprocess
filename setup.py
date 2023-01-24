@@ -46,7 +46,8 @@ setup(
     extras_require={
         "rake": ["nltk", "rake_nltk"],
         "yake": ["yake @ git+https://github.com/LIAAD/yake"],
-        "all": ["nltk", "rake_nltk"],
+        "textrank": ["spacy", "pytextrank"],
+        "all": ["nltk", "rake_nltk", "yake @ git+https://github.com/LIAAD/yake"],
     },
     entry_points={
         "asreview.entry_points": [
