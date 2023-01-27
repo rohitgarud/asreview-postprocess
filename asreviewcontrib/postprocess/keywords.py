@@ -5,11 +5,12 @@ from asreview import open_state
 from asreview import ASReviewProject
 from asreview import ASReviewData
 
-from asreviewcontrib.postprocess.utils import pre_process
 import asreviewcontrib.postprocess.ke_methods as ke
 
 
-def extract_keywords(asreview_filename, outputfile_name, method, use_all_records=False):
+def extract_keywords(
+    asreview_filename, outputfile_name, methods, use_all_records=False
+):
     project_path = Path("tmp_data")
     try:
         shutil.rmtree(project_path)
@@ -42,27 +43,26 @@ def extract_keywords(asreview_filename, outputfile_name, method, use_all_records
             dataset_w_labels["current_label"] == 1
         ].copy()
 
-    if method in ["tf-idf", "textrank"]:
-        # Applying preprocessing to the dataset
-        dataset_included["text"] = dataset_included["text"].apply(pre_process)
-
     corpus = dataset_included["text"].values
 
-    if method == "tf-idf":
-        extracted_keywords = ke.ke_tfidf(corpus)
+    available_methods = {
+        "tf-idf": ke.ke_tfidf,
+        "rake": ke.ke_rake,
+        "yake": ke.ke_yake,
+        "textrank": ke.ke_textrank,
+    }
+    print(f"user input: {methods}")
+    for method in methods:
+        if method in available_methods.keys():
+            dataset_included[f"extracted_keywords ({method})"] = available_methods[
+                method
+            ](corpus)
 
-    elif method == "rake":
-        extracted_keywords = ke.ke_rake(corpus)
+        else:
+            raise ValueError(
+                "This keyword extraction method is not implemented. Please select from [tf-idf, rake, yake, textrank]."
+            )
 
-    elif method == "yake":
-        extracted_keywords = ke.ke_yake(corpus)
-
-    else:
-        raise ValueError(
-            "This keyword extraction method is not implemented. Please select from [tf-idf, rake, yake]."
-        )
-
-    dataset_included[f"extracted_keywords ({method})"] = extracted_keywords
     dataset_included.drop(["current_label", "text"], axis=1, inplace=True)
     dataset_included.to_csv(outputfile_name)
     shutil.rmtree(project_path)

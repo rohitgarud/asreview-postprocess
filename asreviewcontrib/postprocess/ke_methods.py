@@ -5,8 +5,12 @@ from fuzzywuzzy import process
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from asreviewcontrib.postprocess.utils import pre_process
+
 
 def ke_tfidf(corpus):
+
+    corpus = [pre_process(text) for text in corpus]
     # Initialising TF-IDF vectorizer
     vectorizer = TfidfVectorizer(
         stop_words="english", max_df=0.8, ngram_range=(1, 3), max_features=10000
@@ -76,7 +80,7 @@ def ke_yake(corpus):
             top=20,
             features=None,
         )
-        doc_keywords = [keyword[0] for keyword in y.extract_keywords(text)][::-1]
+        doc_keywords = [keyword[0] for keyword in y.extract_keywords(text)]
         deduplicated_doc_keywords = list(process.dedupe(doc_keywords, threshold=70))
         final_keywords = ", ".join(deduplicated_doc_keywords[:5])
         extracted_keywords.append(final_keywords)
@@ -96,6 +100,8 @@ def ke_textrank(corpus):
     import spacy
 
     subprocess.run(["spacy", "download", "en_core_web_sm"])
+
+    corpus = [pre_process(text) for text in corpus]
 
     # load a spaCy model
     nlp = spacy.load("en_core_web_sm")

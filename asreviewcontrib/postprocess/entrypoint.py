@@ -21,19 +21,12 @@ class KeywordsEntryPoint(BaseEntryPoint):
         parser = argparse.ArgumentParser(prog="asreview keywords")
 
         parser.add_argument(
-            "asreview_files",
-            metavar="asreview_files",
-            type=str,
-            nargs="+",
-            help="A (list of) ASReview files",
-        )
-
-        parser.add_argument(
             "-m",
             "--method",
-            dest="method",
-            default="tf-idf",
-            help="Method for extracting keywords (default = tf-idf)",
+            dest="methods",
+            action="append",
+            default=["tf-idf"],
+            help="A (list of) method(s) for extracting keywords (default = tf-idf)",
         )
 
         parser.add_argument(
@@ -55,6 +48,14 @@ class KeywordsEntryPoint(BaseEntryPoint):
             "--version",
             action="version",
             version=f"asreview-notes-export: {self.version}",
+        )
+
+        parser.add_argument(
+            "asreview_files",
+            metavar="asreview_files",
+            type=str,
+            nargs="+",
+            help="A (list of) ASReview file(s)",
         )
 
         parser.add_argument(
@@ -90,6 +91,6 @@ class KeywordsEntryPoint(BaseEntryPoint):
         extract_keywords(
             asreview_filename=asreview_filename,
             outputfile_name=outputfile_name,
-            method=args.method,
+            methods=args.methods,
             use_all_records=args.use_all_records,
         )
